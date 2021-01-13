@@ -1000,6 +1000,9 @@ services:
 ### Mailhog ################################################
     mailhog:
       build: ./mailhog
+      # volumes:
+        # - ${DATA_PATH_HOST}/mailhog/maildir:/maildir
+      # command: ["-storage=maildir", "-maildir-path=/maildir"]
       ports:
         - "1025:1025"
         - "8025:8025"
