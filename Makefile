@@ -14,6 +14,9 @@ docker-down:
 docker-exec-workspace:
 	docker-compose exec --user=laradock workspace bash
 
+docker-workspace-composer-refresh:
+	docker-compose exec --user=laradock workspace composer dumpautoload --optimize
+
 
 # App commands
 
