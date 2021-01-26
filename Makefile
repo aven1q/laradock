@@ -1,15 +1,51 @@
-# Docker init commands and other
+# Local commands
 
-docker-init: docker-build docker-up
+local-docker: local-docker-build local-docker-up
 
-docker-build:
+local-docker-no-cache: local-docker-build-no-cache local-docker-up
+
+local-docker-build:
+	docker-compose build nginx mysql php-fpm php-worker redis redis-webui laravel-echo-server workspace mailhog adminer
+
+local-docker-build-no-cache:
 	docker-compose build --no-cache nginx mysql php-fpm php-worker redis redis-webui laravel-echo-server workspace mailhog adminer
 
-docker-up:
+local-docker-up:
 	docker-compose up -d nginx mysql php-fpm php-worker redis redis-webui laravel-echo-server workspace mailhog adminer
 
-docker-down:
-	docker-compose down
+local-docker-down:
+	docker-compose down --remove-orphans
+
+local-docker-kill-and-remove:
+	docker-compose kill && docker-compose rm -f
+	
+	
+# QA commands
+
+qa-docker: qa-docker-build qa-docker-up
+
+qa-docker-no-cache: qa-docker-build-no-cache qa-docker-up
+
+qa-docker-build:
+	docker-compose -f qa-docker-compose.yml build nginx mysql php-fpm php-worker workspace redis
+
+qa-docker-build-no-cache:
+	docker-compose -f qa-docker-compose.yml build --no-cache nginx mysql php-fpm php-worker workspace redis
+
+qa-docker-up:
+	docker-compose -f qa-docker-compose.yml up -d nginx mysql php-fpm php-worker workspace redis
+
+qa-docker-down:
+	docker-compose -f qa-docker-compose.yml down --remove-orphans
+
+qa-docker-kill-and-remove:
+	docker-compose kill && docker-compose rm -f
+
+
+# Common commands
+
+docker-ps-all:
+	docker-compose ps -a
 
 docker-exec-workspace:
 	docker-compose exec --user=laradock workspace bash
@@ -19,9 +55,6 @@ docker-workspace-composer-refresh:
 
 
 # App commands
-
-app-key-generate:
-	docker-compose exec --user=laradock workspace php artisan key:generate --ansi
 
 app-artisan:
 	docker-compose exec --user=laradock workspace php artisan
@@ -70,3 +103,32 @@ app-migrate-fresh:
 
 app-migrate-fresh-with-seed:
 	docker-compose exec --user=laradock workspace php artisan migrate:fresh --seed
+
+
+# Deployment
+
+qa-deploy:
+	docker-compose exec --user=laradock workspace dep deploy
+
+qa-rollback:
+	docker-compose exec --user=laradock workspace dep rollback
+
+qa-maintenance-mode-down:
+	docker-compose -f qa-docker-compose.yml \
+	exec -T -w /var/www/html/current \
+	--user=laradock workspace php artisan down
+
+qa-maintenance-mode-up:
+	docker-compose -f qa-docker-compose.yml \
+	exec -T -w /var/www/html/current \
+	--user=laradock workspace php artisan up
+
+qa-migrate:
+	docker-compose -f qa-docker-compose.yml \
+	exec -T -w /var/www/html/current \
+	--user=laradock workspace php artisan migrate --force
+
+qa-db-seed:
+	docker-compose -f qa-docker-compose.yml \
+	exec -T -w /var/www/html/current \
+	--user=laradock workspace php artisan db:seed --force

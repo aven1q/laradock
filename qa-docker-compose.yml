@@ -168,6 +168,7 @@ services:
           - no_proxy
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${DEPLOYER_SHARED_PATH_HOST}:${DEPLOYER_SHARED_PATH_CONTAINER}
         - docker-in-docker:/certs/client
         - ./php-worker/supervisord.d:/etc/supervisord.d
       extra_hosts:
@@ -191,7 +192,6 @@ services:
         - backend
       links:
         - docker-in-docker
-        # - mysql # Used in automatically removed containers
 
 ### PHP-FPM ##############################################
     php-fpm:
@@ -270,6 +270,7 @@ services:
       volumes:
         - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${DEPLOYER_SHARED_PATH_HOST}:${DEPLOYER_SHARED_PATH_CONTAINER}
         - docker-in-docker:/certs/client
       expose:
         - "9000"
@@ -323,6 +324,7 @@ services:
           - PGID=${PHP_WORKER_PGID}
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${DEPLOYER_SHARED_PATH_HOST}:${DEPLOYER_SHARED_PATH_CONTAINER}
         - ./php-worker/supervisord.d:/etc/supervisord.d
       depends_on:
         - workspace
@@ -378,6 +380,7 @@ services:
           - no_proxy
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${DEPLOYER_SHARED_PATH_HOST}:${DEPLOYER_SHARED_PATH_CONTAINER}
         - ${NGINX_HOST_LOG_PATH}:/var/log/nginx
         - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
         - ${NGINX_SSL_PATH}:/etc/nginx/ssl
@@ -468,8 +471,8 @@ services:
       volumes:
         - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
         - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
-      ports:
-        - "${MYSQL_PORT}:3306"
+      # ports:
+        # - "${MYSQL_PORT}:3306"
       networks:
         - backend
 
@@ -648,8 +651,8 @@ services:
       build: ./redis
       volumes:
         - ${DATA_PATH_HOST}/redis:/data
-      ports:
-        - "${REDIS_PORT}:6379"
+      # ports:
+        # - "${REDIS_PORT}:6379"
       networks:
         - backend
 
@@ -1439,6 +1442,7 @@ services:
       privileged: true
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+        - ${DEPLOYER_SHARED_PATH_HOST}:${DEPLOYER_SHARED_PATH_CONTAINER}
         - docker-in-docker:/certs/client
       expose:
         - 2375
