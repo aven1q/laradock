@@ -168,6 +168,7 @@ services:
           - no_proxy
       volumes:
         - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
+        - ${SSH_DIR_PATH_HOST}:${SSH_DIR_PATH_CONTAINER}
         - docker-in-docker:/certs/client
         - ./php-worker/supervisord.d:/etc/supervisord.d
       extra_hosts:
@@ -191,7 +192,6 @@ services:
         - backend
       links:
         - docker-in-docker
-        # - mysql # Used in automatically removed containers
 
 ### PHP-FPM ##############################################
     php-fpm:

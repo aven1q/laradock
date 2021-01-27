@@ -15,9 +15,6 @@ local-docker-up:
 
 local-docker-down:
 	docker-compose down --remove-orphans
-
-local-docker-kill-and-remove:
-	docker-compose kill && docker-compose rm -f
 	
 	
 # QA commands
@@ -52,6 +49,9 @@ docker-exec-workspace:
 
 docker-workspace-composer-refresh:
 	docker-compose exec --user=laradock workspace composer dumpautoload --optimize
+
+docker-kill-and-remove:
+	docker-compose kill && docker-compose rm -f
 
 
 # App commands
@@ -108,10 +108,10 @@ app-migrate-fresh-with-seed:
 # Deployment
 
 qa-deploy:
-	docker-compose exec --user=laradock workspace dep deploy
+	docker-compose exec --user=laradock workspace dep deploy qa
 
 qa-rollback:
-	docker-compose exec --user=laradock workspace dep rollback
+	docker-compose exec --user=laradock workspace dep rollback qa
 
 qa-maintenance-mode-down:
 	docker-compose -f qa-docker-compose.yml \
