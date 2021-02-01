@@ -24,13 +24,13 @@ qa-docker: qa-docker-build qa-docker-up
 qa-docker-no-cache: qa-docker-build-no-cache qa-docker-up
 
 qa-docker-build:
-	docker-compose -f qa-docker-compose.yml build nginx mysql php-fpm php-worker workspace redis
+	docker-compose -f qa-docker-compose.yml build nginx certbot mysql php-fpm php-worker workspace redis
 
 qa-docker-build-no-cache:
-	docker-compose -f qa-docker-compose.yml build --no-cache nginx mysql php-fpm php-worker workspace redis
+	docker-compose -f qa-docker-compose.yml build --no-cache nginx certbot mysql php-fpm php-worker workspace redis
 
 qa-docker-up:
-	docker-compose -f qa-docker-compose.yml up -d nginx mysql php-fpm php-worker workspace redis
+	docker-compose -f qa-docker-compose.yml up -d nginx certbot mysql php-fpm php-worker workspace redis
 
 qa-docker-down:
 	docker-compose -f qa-docker-compose.yml down --remove-orphans
@@ -52,6 +52,9 @@ docker-workspace-composer-refresh:
 
 docker-kill-and-remove:
 	docker-compose kill && docker-compose rm -f
+
+docker-stop-all-and-prune:
+	docker container stop $(docker container ps -aq) && docker container prune -f
 
 
 # App commands

@@ -4,4 +4,3 @@ letsencrypt certonly --webroot -w /var/www/letsencrypt -d "$CN" --agree-tos --em
 
 cp /etc/letsencrypt/archive/"$CN"/cert1.pem /var/certs/"$CN"-cert1.pem
 cp /etc/letsencrypt/archive/"$CN"/privkey1.pem /var/certs/"$CN"-privkey1.pem
-
