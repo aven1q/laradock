@@ -53,9 +53,6 @@ docker-workspace-composer-refresh:
 docker-kill-and-remove:
 	docker-compose kill && docker-compose rm -f
 
-docker-stop-all-and-prune:
-	docker container stop $(docker container ps -aq) && docker container prune -f
-
 
 # App commands
 
@@ -125,6 +122,16 @@ qa-maintenance-mode-up:
 	docker-compose -f qa-docker-compose.yml \
 	exec -T -w /var/www/html/current \
 	--user=laradock workspace php artisan up
+
+qa-frontend-install:
+	docker-compose -f qa-docker-compose.yml \
+	exec -T -w /var/www/html/current \
+	--user=laradock workspace npm install
+
+qa-frontend-build:
+	docker-compose -f qa-docker-compose.yml \
+	exec -T -w /var/www/html/current \
+	--user=laradock workspace npm run prod
 
 qa-migrate:
 	docker-compose -f qa-docker-compose.yml \
