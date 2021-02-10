@@ -24,13 +24,13 @@ qa-docker: qa-docker-build qa-docker-up
 qa-docker-no-cache: qa-docker-build-no-cache qa-docker-up
 
 qa-docker-build:
-	docker-compose -f qa-docker-compose.yml build nginx certbot mysql php-fpm php-worker workspace redis
+	docker-compose -f qa-docker-compose.yml build nginx certbot mysql php-fpm php-worker workspace
 
 qa-docker-build-no-cache:
-	docker-compose -f qa-docker-compose.yml build --no-cache nginx certbot mysql php-fpm php-worker workspace redis
+	docker-compose -f qa-docker-compose.yml build --no-cache nginx certbot mysql php-fpm php-worker workspace
 
 qa-docker-up:
-	docker-compose -f qa-docker-compose.yml up -d nginx certbot mysql php-fpm php-worker workspace redis
+	docker-compose -f qa-docker-compose.yml up -d nginx certbot mysql php-fpm php-worker workspace
 
 qa-docker-down:
 	docker-compose -f qa-docker-compose.yml down --remove-orphans
@@ -48,7 +48,13 @@ docker-exec-workspace:
 	docker-compose exec --user=laradock workspace bash
 
 docker-workspace-composer-refresh:
-	docker-compose exec --user=laradock workspace composer dumpautoload --optimize
+	docker-compose exec --user=laradock
+
+docker-workspace-frontend-build-dev:
+	docker-compose exec --user=laradock workspace npm run dev
+
+docker-workspace-frontend-build-prod:
+	docker-compose exec --user=laradock workspace npm run prod
 
 docker-kill-and-remove:
 	docker-compose kill && docker-compose rm -f
@@ -109,6 +115,9 @@ app-migrate-fresh-with-seed:
 
 qa-deploy:
 	docker-compose exec --user=laradock workspace dep deploy qa
+
+qa-deploy-verbose:
+	docker-compose exec --user=laradock workspace dep -vvv deploy qa
 
 qa-rollback:
 	docker-compose exec --user=laradock workspace dep rollback qa
