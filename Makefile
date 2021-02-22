@@ -47,8 +47,11 @@ docker-ps-all:
 docker-exec-workspace:
 	docker-compose exec --user=laradock workspace bash
 
+docker-workspace-composer-install:
+	docker-compose exec --user=laradock workspace composer install
+
 docker-workspace-composer-refresh:
-	docker-compose exec --user=laradock
+	docker-compose exec --user=laradock workspace composer dumpautoload --optimize
 
 docker-workspace-frontend-build-dev:
 	docker-compose exec --user=laradock workspace npm run dev
