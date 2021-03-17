@@ -154,3 +154,8 @@ qa-db-seed:
 	docker-compose -f qa-docker-compose.yml \
 	exec -T -w /var/www/html/current \
 	--user=laradock workspace php artisan db:seed --force
+
+qa-modules-auth-sync-users:
+	docker-compose -f qa-docker-compose.yml \
+	exec -T -w /var/www/html/current \
+	--user=laradock workspace php artisan modules:auth:sync-users
