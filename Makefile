@@ -15,28 +15,6 @@ local-docker-up:
 
 local-docker-down:
 	docker-compose down --remove-orphans
-	
-	
-# QA commands
-
-qa-docker: qa-docker-build qa-docker-up
-
-qa-docker-no-cache: qa-docker-build-no-cache qa-docker-up
-
-qa-docker-build:
-	docker-compose -f qa-docker-compose.yml build nginx certbot mysql php-fpm php-worker workspace
-
-qa-docker-build-no-cache:
-	docker-compose -f qa-docker-compose.yml build --no-cache nginx certbot mysql php-fpm php-worker workspace
-
-qa-docker-up:
-	docker-compose -f qa-docker-compose.yml up -d nginx certbot mysql php-fpm php-worker workspace
-
-qa-docker-down:
-	docker-compose -f qa-docker-compose.yml down --remove-orphans
-
-qa-docker-kill-and-remove:
-	docker-compose kill && docker-compose rm -f
 
 
 # Common commands
@@ -112,50 +90,3 @@ app-migrate-fresh:
 
 app-migrate-fresh-with-seed:
 	docker-compose exec --user=laradock workspace php artisan migrate:fresh --seed
-
-
-# Deployment
-
-qa-deploy:
-	docker-compose exec --user=laradock workspace dep deploy qa
-
-qa-deploy-verbose:
-	docker-compose exec --user=laradock workspace dep -vvv deploy qa
-
-qa-rollback:
-	docker-compose exec --user=laradock workspace dep rollback qa
-
-qa-maintenance-mode-down:
-	docker-compose -f qa-docker-compose.yml \
-	exec -T -w /var/www/html/current \
-	--user=laradock workspace php artisan down
-
-qa-maintenance-mode-up:
-	docker-compose -f qa-docker-compose.yml \
-	exec -T -w /var/www/html/current \
-	--user=laradock workspace php artisan up
-
-qa-frontend-install:
-	docker-compose -f qa-docker-compose.yml \
-	exec -T -w /var/www/html/current \
-	--user=laradock workspace npm install
-
-qa-frontend-build:
-	docker-compose -f qa-docker-compose.yml \
-	exec -T -w /var/www/html/current \
-	--user=laradock workspace npm run prod
-
-qa-migrate:
-	docker-compose -f qa-docker-compose.yml \
-	exec -T -w /var/www/html/current \
-	--user=laradock workspace php artisan migrate --force
-
-qa-db-seed:
-	docker-compose -f qa-docker-compose.yml \
-	exec -T -w /var/www/html/current \
-	--user=laradock workspace php artisan db:seed --force
-
-qa-modules-auth-sync-users:
-	docker-compose -f qa-docker-compose.yml \
-	exec -T -w /var/www/html/current \
-	--user=laradock workspace php artisan modules:auth:sync-users
