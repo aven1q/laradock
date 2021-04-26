@@ -5,13 +5,13 @@ local-docker: local-docker-build local-docker-up
 local-docker-no-cache: local-docker-build-no-cache local-docker-up
 
 local-docker-build:
-	docker-compose build nginx mysql php-fpm php-worker redis redis-webui laravel-echo-server workspace mailhog adminer
+	docker-compose build nginx mysql php-fpm php-worker redis redis-webui laravel-echo-server workspace mailhog adminer selenium
 
 local-docker-build-no-cache:
-	docker-compose build --no-cache nginx mysql php-fpm php-worker redis redis-webui laravel-echo-server workspace mailhog adminer
+	docker-compose build --no-cache nginx mysql php-fpm php-worker redis redis-webui laravel-echo-server workspace mailhog adminer selenium
 
 local-docker-up:
-	docker-compose up -d nginx mysql php-fpm php-worker redis redis-webui laravel-echo-server workspace mailhog adminer
+	docker-compose up -d nginx mysql php-fpm php-worker redis redis-webui laravel-echo-server workspace mailhog adminer selenium
 
 local-docker-down:
 	docker-compose down --remove-orphans
